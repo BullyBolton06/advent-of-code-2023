@@ -9,7 +9,7 @@ public class DayTwo : MonoBehaviour
 
     void Start()
     {
-        int gameIDTotal = 0;
+        int powerTotal = 0;
         List<string> lines = puzzleInput.text.Split('\n').ToList();
         //remove empty lines
         lines.RemoveAll(string.IsNullOrEmpty);
@@ -37,28 +37,23 @@ public class DayTwo : MonoBehaviour
                 switch (colour)
                 {
                     case "red":
-                        if(amount > game.maxRedCubes)
-                            game.tooManyCubes = true;
+                        if(amount > game.MinNeededRedCubes)
+                           game.MinNeededRedCubes = amount;
                         break;
                     case "blue":
-                        if (amount > game.maxBlueCubes)
-                            game.tooManyCubes = true;
+                        if (amount > game.MinNeededBlueCubes)
+                            game.MinNeededBlueCubes = amount;
                         break;
                     case "green":
-                        if (amount > game.maxGreenCubes)
-                            game.tooManyCubes = true;
+                        if (amount > game.MinNeededGreenCubes)
+                            game.MinNeededGreenCubes = amount;
                         break;
                 }
             }
 
-            game.checkGamevalidity();
-            if (game.tooManyCubes == false)
-            {
-                
-                gameIDTotal += game.ID;
-            }
+            powerTotal += (game.MinNeededRedCubes * game.MinNeededBlueCubes * game.MinNeededGreenCubes);
         }
-        Debug.Log(gameIDTotal);
+        Debug.Log(powerTotal);
     }
 }
 
@@ -79,28 +74,10 @@ public class Game
     public Cubes BlueCubes;
     public Cubes GreenCubes;
     public int ID;
-    public int maxRedCubes = 12;
-    public int maxBlueCubes = 14;
-    public int maxGreenCubes = 13;
-    public bool tooManyCubes = false;
-
-    public void checkGamevalidity()
-    {
-        if (RedCubes.count > maxRedCubes)
-        {
-            tooManyCubes = true;
-        }
-
-        if (BlueCubes.count > maxBlueCubes)
-        {
-            tooManyCubes = true;
-        }
-
-        if (GreenCubes.count > maxGreenCubes)
-        {
-            tooManyCubes = true;
-        }
-    }
+    public int MinNeededRedCubes = 0;
+    public int MinNeededBlueCubes = 0;
+    public int MinNeededGreenCubes = 0;
+    
 }
 
 public class Cubes
