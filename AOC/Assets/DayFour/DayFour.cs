@@ -15,8 +15,10 @@ public class DayFour : MonoBehaviour
         //remove any empty lines
         scratchCards.RemoveAll(l => l == "");
         int totalPoints = 0;
+        List<Card> cards = new List<Card>();
         foreach (var card in scratchCards)
         {
+            Card newCard = new Card();
             //split the line ysing '|' as the delimiter
             string[] splitCard = card.Split('|');
             string winningNumbers = splitCard[0].Remove(0, 9);
@@ -25,40 +27,66 @@ public class DayFour : MonoBehaviour
             List<int> winningNumbersList = new List<int>();
             foreach (var number in winningNumbersArray)
             {
-                if (number !="")
+                if (number != "")
                 {
                     winningNumbersList.Add(int.Parse(number));
                 }
-                
             }
-            
+            //add the winning numbers to the cards
+
+
             string[] myNumbers = splitCard[1].Split(' ');
             List<int> myNumbersList = new List<int>();
             foreach (var number in myNumbers)
             {
-                if (number !="")
+                if (number != "")
                 {
                     myNumbersList.Add(int.Parse(number));
                 }
-                
             }
-            
-            //check for matching numbers in the lists
+
+            newCard.winningNumbers = winningNumbersList;
+            newCard.myNumbers = myNumbersList;
+
+            cards.Add(newCard);
+        }
+
+        for (var i = 0; i < cards.Count; i++)
+        {
             int matchingNumbers = 0;
-            foreach (var number in myNumbersList)
+            var card = cards[i];
+            foreach (var number in card.myNumbers)
             {
-                if (winningNumbersList.Contains(number))
+                if (card.winningNumbers.Contains(number))
                 {
                     matchingNumbers++;
                 }
             }
 
-            if (matchingNumbers != 0)
+            if (matchingNumbers == 0)
             {
-                totalPoints += (int)Mathf.Pow(2.0f, (float)(matchingNumbers - 1));
+                Debug.Log("no matches :O");
+            }
+            
+            for (int j = 1; j <= matchingNumbers; j++)
+            {
+                cards[i+j].copies += cards[i].copies ;
             }
         }
-        Debug.Log(totalPoints);
+
+        int copiesCount = 0;
+        foreach (var card in cards)
+        {
+            copiesCount += card.copies;
+        }
         
+        Debug.Log(copiesCount);
+    }
+
+    public class Card
+    {
+        public List<int> winningNumbers;
+        public List<int> myNumbers;
+        public int copies = 1;
     }
 }
