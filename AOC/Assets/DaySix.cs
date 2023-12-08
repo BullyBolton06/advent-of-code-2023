@@ -10,41 +10,36 @@ public class DaySix : MonoBehaviour
     private void Start()
     {
         races = new List<Race>();
-        races.Add(new Race(62, 553));
-        races.Add(new Race(64, 1010));
-        races.Add(new Race(91, 1473));
-        races.Add(new Race(90, 1074));
+        races.Add(new Race(62649190, 553101014731074));
 
-        int counter = 1;
-        foreach (var race in races)
-        {
-            counter *= race.CalculateWinningSpeed();
-        }
+        long counter = 1;
+      
 
-        Debug.Log(counter);
+        Debug.Log(races[0].CalculateWinningSpeed());
     }
 }
 
 public class Race
 {
-    public int maxTime;
-    public int recordDistance;
-    public int winningCombinationCounter { get; private set; }
+    public long maxTime;
+    public long recordDistance;
+    public long winningCombinationCounter { get; private set; }
 
     //constructor that sets the time and distance
-    public Race(int t, int d)
+    public Race(long t, long d)
     {
         maxTime = t;
         recordDistance = d;
     }
 
 
-    public int CalculateWinningSpeed()
+    public long CalculateWinningSpeed()
     {
-        for (int speed = 0; speed < maxTime; speed++)
+        winningCombinationCounter = 0;
+        for (long speed = 0; speed < maxTime; speed++)
         {
-            int time = maxTime - speed;
-            int distance = time * speed;
+            long time = maxTime - speed;
+            long distance = time * speed;
 
             if (distance > recordDistance)
             {
